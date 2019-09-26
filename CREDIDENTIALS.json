@@ -1,4 +1,4 @@
 {
-    "USERNAME": "username@gmail.com",
-    "PASSWORD": "password"
+    "SENDER_EMAIL": "email@gmail.com",
+    "SENDER_PASSWORD": "password"
 }

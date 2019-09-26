@@ -1,6 +1,8 @@
 from string import Template
 import smtplib
 import json
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 USERNAME = ""
 PASSWORD = ""
@@ -16,7 +18,7 @@ def get_contacts():
     return names, emails
 
 
-# Reads template & returns template object
+# Reads template from message.txt & returns template object
 def read_template():
     with open("message.txt", mode='r', encoding='utf-8') as template_file:
         template_file_content = template_file.read()
@@ -32,8 +34,23 @@ def setup_server():
         print(f"USERNAME: {USERNAME}")
         print(f"PASSWORD: {PASSWORD}")
 
-    # s = smtplib.SMTP(host='smtp.gmail.com', port=587)
-    # s.starttls()
-    # s.login(MY_ADDRESS, PASSWORD)
+    s = smtplib.SMTP(host='smtp.gmail.com', port=587)
+    s.starttls()
+    s.login(USERNAME, PASSWORD)
 
-setup_server()
+
+setup_server()  # setup server
+contact_names, contact_emails = get_contacts()  # get contacts
+message_template = read_template()  # read template
+
+# For each contact, send the custom email
+for contact_name, contact_email in zip(contact_names, contact_emails):
+    msg = MIMEMultipart()  # create a message
+    message = message_template.substitute(CONTACT_NAME=name.title())
+    msg['From']=SENDER_EMAIL
+    msg['To']=contact_email
+    msg['Subject']="Subject Text Goes Here"
+    msg.attach(MIMEText(message, 'plain'))
+    s.send_message(msg)
+    
+    del msg
