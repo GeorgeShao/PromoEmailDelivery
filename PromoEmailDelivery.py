@@ -10,27 +10,25 @@ SENDER_PASSWORD = ""
 
 # Reads contacts from contacts.txt & returns names & emails
 def get_contacts():
-    names = []
     emails = []
+    first_names = []
+    last_names = []
     with open("test_data.csv", mode='r', encoding='utf-8') as csv_file:
+        print("Listing contact emails...")
         csv_file_content = csv.reader(csv_file, delimiter=',')
         first_line = True
         for contact in csv_file_content:
             if not first_line:
                 if contact[0]:
+                    emails.append(contact[0])
+                    first_names.append(contact[1])
+                    last_names.append(contact[2])
                     print(f"{contact[0]}: {contact[1]} {contact[2]}")
             else:
                 first_line = False
+    return emails, first_names, last_names
 
-    # with open("contacts.txt", mode='r', encoding='utf-8') as contacts_file:
-    #     for contact in contacts_file:
-    #         names.append(contact.split()[0])
-    #         emails.append(contact.split()[1])
-    # return names, emails
 
-get_contacts()
-
-'''
 # Reads template from message.txt & returns template object
 def read_template():
     with open("message.txt", mode='r', encoding='utf-8') as template_file:
@@ -51,23 +49,23 @@ s.login(SENDER_EMAIL, SENDER_PASSWORD)
 print("Logged into SMTP server")
 
 
-contact_names, contact_emails = get_contacts()  # get contacts
-print("Received contact list")
-
-
+contact_emails, contact_first_names, contact_last_names = get_contacts()  # get contacts
+print("Received contacts")
 message_template = read_template()  # read template
 print("Received message template")
 
+
 # For each contact, send the custom email
-for contact_name, contact_email in zip(contact_names, contact_emails):
+for contact_email, contact_first_name, contact_last_name in zip(contact_emails, contact_first_names, contact_last_names):
     msg = MIMEMultipart()  # create a message
-    message = message_template.substitute(CONTACT_NAME=contact_name.title())
+    message = message_template.substitute(CONTACT_EMAIL=contact_email)
+    message = message_template.substitute(CONTACT_FIRST_NAME=contact_first_name.title())
+    message = message_template.substitute(CONTACT_LAST_NAME=contact_last_name.title())
     msg['From']=SENDER_EMAIL
     msg['To']=contact_email
     msg['Subject']="Subject Text Goes Here"
     msg.attach(MIMEText(message, 'plain'))
     s.send_message(msg)
-    print(f"Msg sent to {contact_name}: {contact_email}")
+    print(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}")
     
     del msg
-'''

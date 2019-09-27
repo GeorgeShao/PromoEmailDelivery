@@ -1,4 +1,8 @@
-Dear ${CONTACT_NAME}, 
+Dear ${CONTACT_FIRST_NAME}, 
 
 This is a test message.
+
+Your name on our database is: ${CONTACT_FIRST_NAME} ${CONTACT_LAST_NAME}
+Your email on our database is: ${CONTACT_EMAIL}
+
 Have a great day!
