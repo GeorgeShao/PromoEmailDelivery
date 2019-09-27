@@ -58,9 +58,7 @@ print("Received message template")
 # For each contact, send the custom email
 for contact_email, contact_first_name, contact_last_name in zip(contact_emails, contact_first_names, contact_last_names):
     msg = MIMEMultipart()  # create a message
-    message = message_template.substitute(CONTACT_EMAIL=contact_email)
-    message = message_template.substitute(CONTACT_FIRST_NAME=contact_first_name.title())
-    message = message_template.substitute(CONTACT_LAST_NAME=contact_last_name.title())
+    message = message_template.substitute(CONTACT_EMAIL=str(contact_email), CONTACT_FIRST_NAME=str(contact_first_name.title()), CONTACT_LAST_NAME=str(contact_last_name.title()))
     msg['From']=SENDER_EMAIL
     msg['To']=contact_email
     msg['Subject']="Subject Text Goes Here"
