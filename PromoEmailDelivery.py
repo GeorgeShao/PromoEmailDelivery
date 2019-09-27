@@ -23,7 +23,7 @@ def get_contacts():
                     emails.append(contact[0])
                     first_names.append(contact[1])
                     last_names.append(contact[2])
-                    print(f"{contact[0]}: {contact[1]} {contact[2]}")
+                    print(f"- {contact[0]}: {contact[1]} {contact[2]}")
             else:
                 first_line = False
     return emails, first_names, last_names
