@@ -2,11 +2,6 @@ Dear ${CONTACT_FIRST_NAME},
 
 This is a test message.
 
-A 2009 study by the University of Texas has revealed that 100% of ${CONTACT_FIRST_NAME} ${CONTACT_LAST_NAME} are in fact very gay.
-The good news is that a cure has been found!
-Please send us 500 packs of ramen to 1600 Pensylvania Avenue, and we will gladly send you a 50mL bottle of the cure.
-We will use our Expedited Ultimate Environmentally-Friendly Diamond Standard Ultra-Fast Secure Safe Shipping Method.
-
 Your name on our database is: ${CONTACT_LAST_NAME}, ${CONTACT_FIRST_NAME}
 Your email on our database is: ${CONTACT_EMAIL}
 
