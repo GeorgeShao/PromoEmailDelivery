@@ -61,7 +61,7 @@ for contact_email, contact_first_name, contact_last_name in zip(contact_emails, 
     message = message_template.substitute(CONTACT_EMAIL=str(contact_email), CONTACT_FIRST_NAME=str(contact_first_name.title()), CONTACT_LAST_NAME=str(contact_last_name.title()))
     msg['From']=SENDER_EMAIL
     msg['To']=contact_email
-    msg['Subject']="Subject Text Goes Here"
+    msg['Subject']="Just Testing Links..."
     msg.attach(MIMEText(message, 'plain'))
     s.send_message(msg)
     print(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}")
