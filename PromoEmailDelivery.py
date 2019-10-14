@@ -111,6 +111,7 @@ class MyWidget(QWidget):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
+    # loginWindow setup code
     loginWindow = MyWidget()
     loginWindow.resize(400, 200)
     loginWindow.setWindowTitle('PromoEmailDelivery (PED)')
@@ -132,12 +133,7 @@ if __name__ == "__main__":
 
     loginWindow.setLayout(loginWindow.layout)
 
-    # Connecting the signal
     loginWindow.loginButton.clicked.connect(loginWindow.login)
     loginWindow.show()
-    
-    messageWindow = MyWidget()
-    messageWindow.resize(1000, 600)
-    messageWindow.show()
 
     sys.exit(app.exec_())
