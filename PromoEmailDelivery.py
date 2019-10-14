@@ -52,8 +52,6 @@ def read_template():
     return Template(template_file_content)
 
 
-
-
 # GUI Code
 class MyWidget(QWidget):
     def __init__(self):
