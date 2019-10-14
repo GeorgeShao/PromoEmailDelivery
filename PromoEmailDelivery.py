@@ -53,37 +53,13 @@ def read_template():
         template_file_content = template_file.read()
     return Template(template_file_content)
 
-
-# GUI Code
 class MyWidget(QWidget):
     def __init__(self):
         QWidget.__init__(self)
 
-        self.setWindowTitle('PromoEmailDelivery (PED)')
-
-        self.text = QLabel("Please enter your email username & password.")
-        self.emailTextBox = QLineEdit(self)
-        self.passwordTextBox = QLineEdit(self)
-        self.loginButton = QPushButton("Login")
-        self.text.setAlignment(Qt.AlignCenter)
-
-        self.emailTextBox.setText("email@example.com")
-        self.passwordTextBox.setText("mypassword123")
-
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.text)
-        self.layout.addWidget(self.emailTextBox)
-        self.layout.addWidget(self.passwordTextBox)
-        self.layout.addWidget(self.loginButton)
-
-        self.setLayout(self.layout)
-
-        # Connecting the signal
-        self.loginButton.clicked.connect(self.login)
-
-
     @Slot()
     def login(self):
+        
         # Get SMTP (Simple Mail Transfer Protocol) server credidentials
         try:
             SENDER_EMAIL = self.emailTextBox.text()
@@ -136,6 +112,31 @@ if __name__ == "__main__":
 
     loginWindow = MyWidget()
     loginWindow.resize(400, 200)
+    loginWindow.setWindowTitle('PromoEmailDelivery (PED)')
+
+    loginWindow.text = QLabel("Please enter your email username & password.")
+    loginWindow.emailTextBox = QLineEdit(loginWindow)
+    loginWindow.passwordTextBox = QLineEdit(loginWindow)
+    loginWindow.loginButton = QPushButton("Login")
+    loginWindow.text.setAlignment(Qt.AlignCenter)
+
+    loginWindow.emailTextBox.setText("email@example.com")
+    loginWindow.passwordTextBox.setText("mypassword123")
+
+    loginWindow.layout = QVBoxLayout()
+    loginWindow.layout.addWidget(loginWindow.text)
+    loginWindow.layout.addWidget(loginWindow.emailTextBox)
+    loginWindow.layout.addWidget(loginWindow.passwordTextBox)
+    loginWindow.layout.addWidget(loginWindow.loginButton)
+
+    loginWindow.setLayout(loginWindow.layout)
+
+    # Connecting the signal
+    loginWindow.loginButton.clicked.connect(loginWindow.login)
     loginWindow.show()
+    
+    messageWindow = MyWidget()
+    messageWindow.resize(1000, 800)
+    messageWindow.show()
 
     sys.exit(app.exec_())
