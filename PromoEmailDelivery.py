@@ -9,10 +9,12 @@ from email.mime.text import MIMEText
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 
+
+colorama.init()
+
 SENDER_EMAIL = ""
 SENDER_PASSWORD = ""
 
-colorama.init()
 
 # Prints custom coloured terminal msgs for logging, success msgs, errors msgs
 def terminal_msg(msg, msg_type):
@@ -79,38 +81,55 @@ class MyWidget(QWidget):
         # Connecting the signal
         self.loginButton.clicked.connect(self.login)
 
+
     @Slot()
     def login(self):
         # Get SMTP (Simple Mail Transfer Protocol) server credidentials
-        SENDER_EMAIL = self.emailTextBox.text()
-        SENDER_PASSWORD = self.passwordTextBox.text()
-        terminal_msg("Obtained credidentials", "success")
+        try:
+            SENDER_EMAIL = self.emailTextBox.text()
+            SENDER_PASSWORD = self.passwordTextBox.text()
+            terminal_msg("Obtained credidentials", "success")
+        except Exception as e:
+            terminal_msg("Error obtaining credidentials", "error")
 
         # Login to SMTP server
-        s = smtplib.SMTP(host='smtp.gmail.com', port=587)
-        s.starttls()
-        s.login(SENDER_EMAIL, SENDER_PASSWORD)
-        terminal_msg("Logged into SMTP server", "success")
+        try:
+            s = smtplib.SMTP(host='smtp.gmail.com', port=587)
+            s.starttls()
+            s.login(SENDER_EMAIL, SENDER_PASSWORD)
+            terminal_msg("Logged into SMTP server", "success")
+        except Exception as e:
+            terminal_msg("Error logging into SMTP server", "error")
 
         # Get contacts
-        contact_emails, contact_first_names, contact_last_names = get_contacts()
-        terminal_msg("Received contacts", "success")
+        try:
+            contact_emails, contact_first_names, contact_last_names = get_contacts()
+            terminal_msg("Obtained contacts", "success")
+        except Exception as e:
+            terminal_msg("Error obtaining contacts", "error")
 
         # Read template
-        message_template = read_template()
-        terminal_msg("Received message template", "success")
+        try:
+            message_template = read_template()
+            terminal_msg("Obtained message template", "success")
+        except Exception as e:
+            terminal_msg("Error obtaining message template", "error")
 
         # For each contact, send the custom email
         for contact_email, contact_first_name, contact_last_name in zip(contact_emails, contact_first_names, contact_last_names):
-            msg = MIMEMultipart()  # create a message
-            message = message_template.substitute(CONTACT_EMAIL=str(contact_email), CONTACT_FIRST_NAME=str(contact_first_name.title()), CONTACT_LAST_NAME=str(contact_last_name.title()))
-            msg['From']=SENDER_EMAIL
-            msg['To']=contact_email
-            msg['Subject']="Just Testing Links..."
-            msg.attach(MIMEText(message, 'plain'))
-            s.send_message(msg)
-            terminal_msg(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}", "success")
-            del msg
+            try:
+                msg = MIMEMultipart()  # create a message
+                message = message_template.substitute(CONTACT_EMAIL=str(contact_email), CONTACT_FIRST_NAME=str(contact_first_name.title()), CONTACT_LAST_NAME=str(contact_last_name.title()))
+                msg['From']=SENDER_EMAIL
+                msg['To']=contact_email
+                msg['Subject']="Just Testing Links..."
+                msg.attach(MIMEText(message, 'plain'))
+                s.send_message(msg)
+                terminal_msg(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}", "success")
+                del msg
+            except Exception as e:
+                terminal_msg(f"Error sending msg to {contact_last_name}, {contact_first_name}: {contact_email}", "error")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
