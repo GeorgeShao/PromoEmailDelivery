@@ -120,7 +120,7 @@ if __name__ == "__main__":
     loginWindow.emailTextBox = QLineEdit()
     loginWindow.passwordTextBox = QLineEdit()
     loginWindow.passwordTextBox.setEchoMode(QLineEdit.EchoMode.Password)
-    loginWindow.loginButton = QPushButton("Login")
+    loginWindow.loginButton = QPushButton("Send Emails")
     loginWindow.text.setAlignment(Qt.AlignCenter)
 
     loginWindow.emailTextBox.setText("email@example.com")
