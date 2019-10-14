@@ -82,11 +82,9 @@ class MyWidget(QWidget):
     @Slot()
     def login(self):
         # Get SMTP (Simple Mail Transfer Protocol) server credidentials
-        with open("CREDIDENTIALS.json", mode='r', encoding='utf-8') as credidentials_file:
-            data = json.load(credidentials_file)
-            SENDER_EMAIL = data["SENDER_EMAIL"]
-            SENDER_PASSWORD = data["SENDER_PASSWORD"]
-            terminal_msg("Obtained credidentials", "success")
+        SENDER_EMAIL = self.emailTextBox.text()
+        SENDER_PASSWORD = self.passwordTextBox.text()
+        terminal_msg("Obtained credidentials", "success")
 
         # Login to SMTP server
         s = smtplib.SMTP(host='smtp.gmail.com', port=587)
