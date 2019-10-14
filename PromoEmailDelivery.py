@@ -117,13 +117,14 @@ if __name__ == "__main__":
     loginWindow.setWindowTitle('PromoEmailDelivery (PED)')
 
     loginWindow.text = QLabel("Please enter your email username & password.")
-    loginWindow.emailTextBox = QLineEdit(loginWindow)
-    loginWindow.passwordTextBox = QLineEdit(loginWindow)
+    loginWindow.emailTextBox = QLineEdit()
+    loginWindow.passwordTextBox = QLineEdit()
+    loginWindow.passwordTextBox.setEchoMode(QLineEdit.EchoMode.Password)
     loginWindow.loginButton = QPushButton("Login")
     loginWindow.text.setAlignment(Qt.AlignCenter)
 
     loginWindow.emailTextBox.setText("email@example.com")
-    loginWindow.passwordTextBox.setText("mypassword123")
+    loginWindow.passwordTextBox.setText("password")
 
     loginWindow.layout = QVBoxLayout()
     loginWindow.layout.addWidget(loginWindow.text)
