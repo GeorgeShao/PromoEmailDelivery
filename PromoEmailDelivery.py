@@ -12,13 +12,17 @@ from PySide2.QtCore import *
 SENDER_EMAIL = ""
 SENDER_PASSWORD = ""
 
+colorama.init()
+
+# Prints custom coloured terminal msgs for logging, success msgs, errors msgs
 def terminal_msg(msg, msg_type):
     if msg_type == "log":
         print(colorama.Fore.WHITE + msg)
-    if msg_type == "error":
-        print(colorama.Fore.RED + msg)
-    if msg_type == "success":
+    elif msg_type == "success":
         print(colorama.Fore.GREEN + msg)
+    elif msg_type == "error":
+        print(colorama.Fore.RED + msg)
+    
 
 # Reads contacts from contacts.txt & returns names & emails
 def get_contacts():
@@ -48,37 +52,7 @@ def read_template():
     return Template(template_file_content)
 
 
-# Setup SMTP (Simple Mail Transfer Protocol) server
-with open("CREDIDENTIALS.json", mode='r', encoding='utf-8') as credidentials_file:
-    data = json.load(credidentials_file)
-    SENDER_EMAIL = data["SENDER_EMAIL"]
-    SENDER_PASSWORD = data["SENDER_PASSWORD"]
-    print("Obtained credidentials")
 
-s = smtplib.SMTP(host='smtp.gmail.com', port=587)
-s.starttls()
-s.login(SENDER_EMAIL, SENDER_PASSWORD)
-print("Logged into SMTP server")
-
-
-contact_emails, contact_first_names, contact_last_names = get_contacts()  # get contacts
-terminal_msg("Received contacts", "success")
-message_template = read_template()  # read template
-terminal_msg("Received message template", "success")
-
-
-# For each contact, send the custom email
-for contact_email, contact_first_name, contact_last_name in zip(contact_emails, contact_first_names, contact_last_names):
-    msg = MIMEMultipart()  # create a message
-    message = message_template.substitute(CONTACT_EMAIL=str(contact_email), CONTACT_FIRST_NAME=str(contact_first_name.title()), CONTACT_LAST_NAME=str(contact_last_name.title()))
-    msg['From']=SENDER_EMAIL
-    msg['To']=contact_email
-    msg['Subject']="Just Testing Links..."
-    msg.attach(MIMEText(message, 'plain'))
-    s.send_message(msg)
-    terminal_msg(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}", "success")
-    
-    del msg
 
 # GUI Code
 class MyWidget(QWidget):
@@ -105,11 +79,42 @@ class MyWidget(QWidget):
         self.setLayout(self.layout)
 
         # Connecting the signal
-        self.loginButton.clicked.connect(self.magic)
+        self.loginButton.clicked.connect(self.login)
 
     @Slot()
-    def magic(self):
-        terminal_msg("button pressed", "log")
+    def login(self):
+        # Get SMTP (Simple Mail Transfer Protocol) server credidentials
+        with open("CREDIDENTIALS.json", mode='r', encoding='utf-8') as credidentials_file:
+            data = json.load(credidentials_file)
+            SENDER_EMAIL = data["SENDER_EMAIL"]
+            SENDER_PASSWORD = data["SENDER_PASSWORD"]
+            terminal_msg("Obtained credidentials", "success")
+
+        # Login to SMTP server
+        s = smtplib.SMTP(host='smtp.gmail.com', port=587)
+        s.starttls()
+        s.login(SENDER_EMAIL, SENDER_PASSWORD)
+        terminal_msg("Logged into SMTP server", "success")
+
+        # Get contacts
+        contact_emails, contact_first_names, contact_last_names = get_contacts()
+        terminal_msg("Received contacts", "success")
+
+        # Read template
+        message_template = read_template()
+        terminal_msg("Received message template", "success")
+
+        # For each contact, send the custom email
+        for contact_email, contact_first_name, contact_last_name in zip(contact_emails, contact_first_names, contact_last_names):
+            msg = MIMEMultipart()  # create a message
+            message = message_template.substitute(CONTACT_EMAIL=str(contact_email), CONTACT_FIRST_NAME=str(contact_first_name.title()), CONTACT_LAST_NAME=str(contact_last_name.title()))
+            msg['From']=SENDER_EMAIL
+            msg['To']=contact_email
+            msg['Subject']="Just Testing Links..."
+            msg.attach(MIMEText(message, 'plain'))
+            s.send_message(msg)
+            terminal_msg(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}", "success")
+            del msg
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
