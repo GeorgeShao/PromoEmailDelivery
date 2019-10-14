@@ -1,12 +1,24 @@
+import sys
 import csv
 from string import Template
 import smtplib
 import json
+import colorama
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from PySide2.QtWidgets import *
+from PySide2.QtCore import *
 
 SENDER_EMAIL = ""
 SENDER_PASSWORD = ""
+
+def terminal_msg(msg, msg_type):
+    if msg_type == "log":
+        print(colorama.Fore.WHITE + msg)
+    if msg_type == "error":
+        print(colorama.Fore.RED + msg)
+    if msg_type == "success":
+        print(colorama.Fore.GREEN + msg)
 
 # Reads contacts from contacts.txt & returns names & emails
 def get_contacts():
@@ -67,3 +79,43 @@ for contact_email, contact_first_name, contact_last_name in zip(contact_emails, 
     print(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}")
     
     del msg
+
+# GUI Code
+class MyWidget(QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
+
+        self.setWindowTitle('PromoEmailDelivery (PED)')
+
+        self.text = QLabel("Please enter your email username & password.")
+        self.emailTextBox = QLineEdit(self)
+        self.passwordTextBox = QLineEdit(self)
+        self.loginButton = QPushButton("Login")
+        self.text.setAlignment(Qt.AlignCenter)
+
+        self.emailTextBox.setText("email@example.com")
+        self.passwordTextBox.setText("mypassword123")
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.text)
+        self.layout.addWidget(self.emailTextBox)
+        self.layout.addWidget(self.passwordTextBox)
+        self.layout.addWidget(self.loginButton)
+
+        self.setLayout(self.layout)
+
+        # Connecting the signal
+        self.loginButton.clicked.connect(self.magic)
+
+    @Slot()
+    def magic(self):
+        print('text')
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+
+    widget = MyWidget()
+    widget.resize(400, 200)
+    widget.show()
+
+    sys.exit(app.exec_())
