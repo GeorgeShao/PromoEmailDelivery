@@ -26,7 +26,7 @@ def get_contacts():
     first_names = []
     last_names = []
     with open("test_data.csv", mode='r', encoding='utf-8') as csv_file:
-        print("Listing contact emails...")
+        terminal_msg("Listing contact emails...", "log")
         csv_file_content = csv.reader(csv_file, delimiter=',')
         first_line = True
         for contact in csv_file_content:
@@ -35,7 +35,7 @@ def get_contacts():
                     emails.append(contact[0])
                     first_names.append(contact[1])
                     last_names.append(contact[2])
-                    print(f"- {contact[0]}: {contact[1]} {contact[2]}")
+                    terminal_msg(f"- {contact[0]}: {contact[1]} {contact[2]}", "log")
             else:
                 first_line = False
     return emails, first_names, last_names
@@ -62,9 +62,9 @@ print("Logged into SMTP server")
 
 
 contact_emails, contact_first_names, contact_last_names = get_contacts()  # get contacts
-print("Received contacts")
+terminal_msg("Received contacts", "success")
 message_template = read_template()  # read template
-print("Received message template")
+terminal_msg("Received message template", "success")
 
 
 # For each contact, send the custom email
@@ -76,7 +76,7 @@ for contact_email, contact_first_name, contact_last_name in zip(contact_emails, 
     msg['Subject']="Just Testing Links..."
     msg.attach(MIMEText(message, 'plain'))
     s.send_message(msg)
-    print(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}")
+    terminal_msg(f"Msg sent to {contact_last_name}, {contact_first_name}: {contact_email}", "success")
     
     del msg
 
@@ -109,7 +109,7 @@ class MyWidget(QWidget):
 
     @Slot()
     def magic(self):
-        print('text')
+        terminal_msg("button pressed", "log")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
