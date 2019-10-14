@@ -53,13 +53,14 @@ def read_template():
         template_file_content = template_file.read()
     return Template(template_file_content)
 
+
+# Main code
 class MyWidget(QWidget):
     def __init__(self):
         QWidget.__init__(self)
 
     @Slot()
     def login(self):
-        
         # Get SMTP (Simple Mail Transfer Protocol) server credidentials
         try:
             SENDER_EMAIL = self.emailTextBox.text()
@@ -136,7 +137,7 @@ if __name__ == "__main__":
     loginWindow.show()
     
     messageWindow = MyWidget()
-    messageWindow.resize(1000, 800)
+    messageWindow.resize(1000, 600)
     messageWindow.show()
 
     sys.exit(app.exec_())
